@@ -1,0 +1,140 @@
+
+<!doctype html>
+<html lang="es">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<title>Ejemplo SVG interactivo — Estándar SVG</title>
+	<style>
+		:root{--accent:#0078d4;--muted:#6b7280}
+		body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;line-height:1.4;margin:0;padding:1rem;background:#fff;color:#111}
+		header{display:flex;align-items:center;justify-content:space-between;gap:1rem}
+		h1{font-size:1.25rem;margin:0}
+		.container{max-width:820px;margin:1.25rem auto;padding:1rem}
+		.svgbox{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:1rem;margin-top:1rem}
+		.card{border:1px solid #e5e7eb;padding:0.75rem;border-radius:8px;background:#fff}
+		.visually-hidden{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+		svg{width:100%;height:120px;display:block}
+		.info{margin-top:0.75rem;color:var(--muted);font-size:0.95rem}
+		/* focus styles for keyboard users */
+		.focus-ring:focus{outline:3px solid rgba(0,120,212,0.25);outline-offset:3px}
+		.btn-like{cursor:pointer}
+		.sr-btn{display:inline-flex;align-items:center;gap:.5rem}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<header>
+			<h1>SVG interactivo — íconos accesibles</h1>
+			<p class="info">Ejemplo práctico de uso de <strong>SVG</strong> con interactividad y accesibilidad.</p>
+		</header>
+
+		<section aria-labelledby="demo-title">
+			<h2 id="demo-title" class="visually-hidden">Demostración de íconos SVG interactivos</h2>
+
+			<div class="svgbox">
+				<article class="card">
+					<h3 style="margin:0 0 .5rem 0">Tema</h3>
+					<!-- SVG con role=img y title/desc para accesibilidad -->
+					<svg viewBox="0 0 64 64" role="img" aria-labelledby="sunTitle sunDesc" tabindex="0" class="focus-ring" id="sunIcon">
+						<title id="sunTitle">Alternar tema</title>
+						<desc id="sunDesc">Ícono de sol que al activarse alterna el color del ícono.</desc>
+						<circle cx="32" cy="32" r="12" fill="gold" stroke="#b58100" stroke-width="2"></circle>
+						<g stroke="#b58100" stroke-width="2">
+							<line x1="32" y1="4" x2="32" y2="14"></line>
+							<line x1="32" y1="50" x2="32" y2="60"></line>
+							<line x1="4" y1="32" x2="14" y2="32"></line>
+							<line x1="50" y1="32" x2="60" y2="32"></line>
+						</g>
+					</svg>
+					<p class="info">Presiona Enter o Barra espaciadora para alternar el color del ícono.</p>
+				</article>
+
+				<article class="card">
+					<h3 style="margin:0 0 .5rem 0">Me gusta</h3>
+					<svg viewBox="0 0 64 64" role="img" aria-labelledby="heartTitle heartDesc" class="focus-ring btn-like" id="heartIcon" tabindex="0">
+						<title id="heartTitle">Botón Me gusta</title>
+						<desc id="heartDesc">Corazón que se puede activar para indicar 'me gusta'.</desc>
+						<path d="M32 52s-18-11.5-22-18.5C6 23 18 10 32 22c14-12 26 1 22 11.5C50 40.5 32 52 32 52z" fill="#ef4444" stroke="#b91c1c" stroke-width="1.5"></path>
+					</svg>
+					<p class="info">Activar con teclado o clic actualiza el estado 'aria-pressed'.</p>
+				</article>
+
+				<article class="card">
+					<h3 style="margin:0 0 .5rem 0">Zoom</h3>
+					<svg viewBox="0 0 64 64" role="img" aria-labelledby="zoomTitle zoomDesc" class="focus-ring" tabindex="0" id="zoomIcon">
+						<title id="zoomTitle">Zoom interactivo</title>
+						<desc id="zoomDesc">Lupa que muestra una parte del círculo ampliada al activar.</desc>
+						<circle cx="28" cy="28" r="12" fill="#10b981"></circle>
+						<g stroke="#065f46" stroke-width="3">
+							<line x1="40" y1="40" x2="56" y2="56"></line>
+						</g>
+					</svg>
+					<p class="info">Al activar, la lupa hace zoom (animación simple).</p>
+				</article>
+			</div>
+
+			<div id="log" aria-live="polite" style="margin-top:1rem;color:var(--muted)"></div>
+		</section>
+	</div>
+
+	<script>
+		// Mejorar accesibilidad: permitir Enter/Space para activar los SVG
+		function makeActivable(el, handler, options={pressed:false}){
+			el.setAttribute('role', 'button');
+			el.setAttribute('tabindex', el.getAttribute('tabindex') || 0);
+			el.setAttribute('aria-pressed', options.pressed);
+			el.addEventListener('keydown', function(e){
+				if(e.key === 'Enter' || e.key === ' '){
+					e.preventDefault();
+					handler(e);
+				}
+			});
+			el.addEventListener('click', handler);
+		}
+
+		const log = document.getElementById('log');
+
+		// Sun icon: alterna color (simula modo claro/oscuro solo en el ícono)
+		const sun = document.getElementById('sunIcon');
+		makeActivable(sun, ()=>{
+			const circle = sun.querySelector('circle');
+			const isGold = circle.getAttribute('fill') === 'gold';
+			circle.setAttribute('fill', isGold ? '#94a3b8' : 'gold');
+			sun.setAttribute('aria-pressed', String(!isGold));
+			log.textContent = isGold ? 'Tema: oscuro (ícono)' : 'Tema: claro (ícono)';
+		});
+
+		// Heart icon: toggle aria-pressed and scale animation
+		const heart = document.getElementById('heartIcon');
+		makeActivable(heart, ()=>{
+			const pressed = heart.getAttribute('aria-pressed') === 'true';
+			heart.setAttribute('aria-pressed', String(!pressed));
+			const path = heart.querySelector('path');
+			if(!pressed){
+				path.setAttribute('transform', 'scale(1.08)');
+				setTimeout(()=>path.removeAttribute('transform'),220);
+				log.textContent = 'Has marcado Me gusta.';
+			} else {
+				log.textContent = 'Has quitado Me gusta.';
+			}
+		}, {pressed:false});
+
+		// Zoom icon: simple pulse to indicate action
+		const zoom = document.getElementById('zoomIcon');
+		makeActivable(zoom, ()=>{
+			const circle = zoom.querySelector('circle');
+			circle.animate([
+				{transform: 'scale(1)'},
+				{transform: 'scale(1.26)'}
+			],{duration:280,iterations:1,easing:'ease-out'});
+			log.textContent = 'Zoom aplicado.';
+		});
+
+		// Mejora: cuando el elemento recibe foco mostrar un outline natural para teclado
+		document.querySelectorAll('.focus-ring').forEach(el=>{
+			el.addEventListener('focus', ()=>el.classList.add('focus-ring'));
+		});
+	</script>
+</body>
+</html>
