@@ -1,0 +1,34 @@
+meta {
+  name: update-post-title
+  type: http
+  seq: 5
+}
+
+patch {
+  url: https://jsonplaceholder.typicode.com/posts/1
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "request": {
+      "method": "PATCH",
+      "url": "https://jsonplaceholder.typicode.com/posts/1",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" }
+      ],
+      "body": {
+        "type": "json",
+        "content": {
+          "title": "updated title"
+        }
+      }
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

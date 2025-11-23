@@ -1,0 +1,36 @@
+meta {
+  name: create-todo
+  type: http
+  seq: 17
+}
+
+post {
+  url: https://jsonplaceholder.typicode.com/todos
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "request": {
+      "method": "POST",
+      "url": "https://jsonplaceholder.typicode.com/todos",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" }
+      ],
+      "body": {
+        "type": "json",
+        "content": {
+          "title": "Buy milk",
+          "completed": false,
+          "userId": 1
+        }
+      }
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

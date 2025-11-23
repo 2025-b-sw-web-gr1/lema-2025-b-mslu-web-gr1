@@ -1,0 +1,26 @@
+meta {
+  name: get-all-photos
+  type: http
+  seq: 13
+}
+
+get {
+  url: https://jsonplaceholder.typicode.com/photos
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "request": {
+      "method": "GET",
+      "url": "https://jsonplaceholder.typicode.com/photos",
+      "headers": []
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

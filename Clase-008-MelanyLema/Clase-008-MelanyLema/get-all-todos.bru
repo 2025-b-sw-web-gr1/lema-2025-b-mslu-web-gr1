@@ -1,0 +1,26 @@
+meta {
+  name: get-all-todos
+  type: http
+  seq: 15
+}
+
+get {
+  url: https://jsonplaceholder.typicode.com/todos
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "request": {
+      "method": "GET",
+      "url": "https://jsonplaceholder.typicode.com/todos",
+      "headers": []
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

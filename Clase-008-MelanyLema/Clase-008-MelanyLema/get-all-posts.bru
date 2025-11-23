@@ -1,0 +1,26 @@
+meta {
+  name: get-all-posts
+  type: http
+  seq: 1
+}
+
+get {
+  url: https://jsonplaceholder.typicode.com/posts
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "request": {
+      "method": "GET",
+      "url": "https://jsonplaceholder.typicode.com/posts",
+      "headers": []
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

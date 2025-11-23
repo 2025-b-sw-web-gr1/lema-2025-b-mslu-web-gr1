@@ -1,0 +1,30 @@
+meta {
+  name: get-comments-by-post
+  type: http
+  seq: 8
+}
+
+get {
+  url: https://jsonplaceholder.typicode.com/comments?postId=1
+  body: json
+  auth: inherit
+}
+
+params:query {
+  postId: 1
+}
+
+body:json {
+  {
+    "request": {
+      "method": "GET",
+      "url": "https://jsonplaceholder.typicode.com/comments?postId=1",
+      "headers": []
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

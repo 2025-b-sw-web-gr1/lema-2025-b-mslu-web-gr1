@@ -1,0 +1,26 @@
+meta {
+  name: get-all-albums
+  type: http
+  seq: 10
+}
+
+get {
+  url: https://jsonplaceholder.typicode.com/albums
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "request": {
+      "method": "GET",
+      "url": "https://jsonplaceholder.typicode.com/albums",
+      "headers": []
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

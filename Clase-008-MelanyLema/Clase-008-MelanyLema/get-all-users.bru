@@ -1,0 +1,26 @@
+meta {
+  name: get-all-users
+  type: http
+  seq: 18
+}
+
+get {
+  url: https://jsonplaceholder.typicode.com/users
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "request": {
+      "method": "GET",
+      "url": "https://jsonplaceholder.typicode.com/users",
+      "headers": []
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
