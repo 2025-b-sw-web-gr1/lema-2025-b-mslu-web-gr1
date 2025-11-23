@@ -6,10 +6,21 @@ meta {
 
 get {
   url: https://jsonplaceholder.typicode.com/comments
-  body: none
+  body: json
   auth: inherit
+}
+
+body:json {
+  {
+    "request": {
+      "method": "GET",
+      "url": "https://jsonplaceholder.typicode.com/comments",
+      "headers": []
+    }
+  }
 }
 
 settings {
   encodeUrl: true
+  timeout: 0
 }
