@@ -1,0 +1,104 @@
+doctype html
+html(lang="es")
+  head
+    meta(charset="utf-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1")
+    title= data.inicio.title + ' — Sitio'
+    style.
+      :root{
+        --bg:#0b0b0b;
+        --surface:#121212;
+        --muted:#a3a3a3;
+        --accent:#d0d0d0;
+        --accent-2:#ffffff;
+      }
+      *{box-sizing:border-box}
+      body{margin:0;font-family: Arial, Helvetica, sans-serif;background:linear-gradient(180deg,var(--bg),#070707);color:var(--accent-2);-webkit-font-smoothing:antialiased}
+      .container{max-width:1100px;margin:40px auto;padding:0 20px}
+      .hero{display:flex;align-items:center;justify-content:center;padding:40px 0;background:linear-gradient(180deg,rgba(255,255,255,0.03),transparent)}
+      .hero-inner{display:flex;gap:24px;align-items:center;width:100%;max-width:1100px}
+      .hero-img{width:220px;height:140px;object-fit:cover;border-radius:6px;filter:grayscale(10%) contrast(0.9)}
+      .hero-text h1{font-size:40px;margin:0 0 8px}
+      .lead{color:var(--muted);margin:0 0 10px}
+      .intro{max-width:720px;color:var(--muted);line-height:1.6}
+      .section{margin:48px 0;padding:24px 16px;border-radius:10px;background:rgba(255,255,255,0.02)}
+      .section-title{font-size:24px;margin:0 0 18px;border-left:4px solid var(--accent-2);padding-left:12px}
+      .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}
+      .card{background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent);padding:12px;border-radius:10px;display:flex;gap:12px;align-items:flex-start}
+      .card-img{width:84px;height:84px;object-fit:cover;border-radius:6px}
+      .card-title{margin:0;font-size:18px}
+      .meta{color:var(--muted);font-size:13px;margin:6px 0}
+      .card-text{margin:0;color:var(--muted);font-size:14px}
+      .albums-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px}
+      .album{background:linear-gradient(180deg,rgba(255,255,255,0.015),transparent);padding:12px;border-radius:8px;display:flex;gap:12px;align-items:flex-start}
+      .album-cover{width:100px;height:100px;object-fit:cover;border-radius:4px}
+      .album-info h3{margin:0 0 6px}
+      .album-year{color:var(--muted);font-size:13px;margin-bottom:8px}
+      .album-desc{color:var(--muted);font-size:14px}
+      .history{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+      .history-block{background:rgba(255,255,255,0.015);padding:12px;border-radius:8px}
+      .history-block h3{margin-top:0}
+      .timeline{display:flex;flex-direction:column;gap:12px}
+      .timeline-item{display:flex;gap:12px;align-items:flex-start}
+      .timeline-year{min-width:72px;background:var(--surface);color:var(--accent);padding:8px 10px;border-radius:6px;font-weight:700}
+      .timeline-content{background:rgba(255,255,255,0.02);padding:10px;border-radius:8px}
+      .footer{padding:24px 0;text-align:center;color:var(--muted)}
+      @media (max-width:600px){.hero-inner{flex-direction:column;align-items:flex-start}.hero-img{width:100%;height:200px}}
+  body
+    header.hero
+      .hero-inner
+        img.hero-img(src=data.inicio.heroImage alt="Arctic Monkeys")
+        .hero-text
+          h1= data.inicio.title
+          p.lead= data.inicio.subtitle
+          p.intro= data.inicio.intro
+
+    main.container
+      section#canciones.section
+        h2.section-title Canciones más escuchadas
+        .cards
+          each song in data.canciones
+            .card
+              img.card-img(src=song.image alt=song.title)
+              .card-body
+                h3.card-title= song.title
+                p.meta #{song.year} • #{song.album}
+                p.card-text= song.description
+
+      section#albumes.section
+        h2.section-title Álbumes
+        .albums-grid
+          each album in data.albumes
+            .album(class=album.cssClass)
+              img.album-cover(src=album.cover alt=album.title)
+              .album-info
+                h3= album.title
+                p.album-year= album.year
+                p.album-desc= album.description
+
+      section#historia.section
+        h2.section-title Historia
+        .history
+          .history-block
+            h3 Inicios
+            p= data.historia.inicio
+          .history-block
+            h3 Ascenso al éxito
+            p= data.historia.ascenso
+          .history-block
+            h3 Cambios musicales
+            p= data.historia.evolucion
+
+      section#eventos.section
+        h2.section-title Eventos importantes / Conciertos icónicos
+        .timeline
+          each ev in data.eventos
+            .timeline-item
+              .timeline-year= ev.year
+              .timeline-content
+                h4= ev.place
+                p= ev.description
+
+    footer.footer
+      .footer-inner
+        p © Arctic Monkeys — Página de ejemplo. Contenido informativo.
