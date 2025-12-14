@@ -1,0 +1,23 @@
+meta {
+  name: Crear nuevo usuario
+  type: http
+  seq: 3
+}
+
+post {
+  url: https://api.ejemplo.com/users
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "name": "Carlos López",
+    "email": "carlos@example.com",
+    "username": "carlosl"
+  }
+}

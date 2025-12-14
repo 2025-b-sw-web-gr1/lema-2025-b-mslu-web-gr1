@@ -1,0 +1,23 @@
+meta {
+  name: Actualizar publicación
+  type: http
+  seq: 9
+}
+
+put {
+  url: https://api.ejemplo.com/posts/1
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "title": "Mi primera publicación actualizada",
+    "content": "Contenido actualizado de la publicación",
+    "userId": 1
+  }
+}

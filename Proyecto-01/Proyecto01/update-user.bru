@@ -1,0 +1,23 @@
+meta {
+  name: Actualizar usuario
+  type: http
+  seq: 4
+}
+
+put {
+  url: https://api.ejemplo.com/users/1
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "name": "Juan Carlos Pérez",
+    "email": "juancarlos@example.com",
+    "username": "juancp"
+  }
+}

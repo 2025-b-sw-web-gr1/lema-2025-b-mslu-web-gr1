@@ -1,0 +1,23 @@
+meta {
+  name: Crear nueva publicación
+  type: http
+  seq: 8
+}
+
+post {
+  url: https://api.ejemplo.com/posts
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "title": "Mi primera publicación",
+    "content": "Este es el contenido de mi primera publicación",
+    "userId": 1
+  }
+}

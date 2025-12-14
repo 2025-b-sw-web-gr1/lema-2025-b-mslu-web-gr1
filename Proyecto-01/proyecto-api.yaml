@@ -1,0 +1,416 @@
+openapi: 3.0.0
+info:
+  title: API de Usuarios y Publicaciones
+  description: API RESTful para gestionar usuarios y sus publicaciones (relación 1 a muchos)
+  version: 1.0.0
+  contact:
+    name: Melany Lema
+servers:
+  - url: https://api.ejemplo.com
+    description: Servidor de producción
+  - url: http://localhost:3000
+    description: Servidor de desarrollo
+
+paths:
+  /users:
+    get:
+      summary: Obtener todos los usuarios
+      description: Retorna una lista con todos los usuarios registrados en el sistema
+      tags:
+        - Usuarios
+      responses:
+        '200':
+          description: Lista de usuarios obtenida exitosamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+              example:
+                - id: 1
+                  name: "Juan Pérez"
+                  email: "juan@example.com"
+                  username: "juanp"
+                - id: 2
+                  name: "María García"
+                  email: "maria@example.com"
+                  username: "mariag"
+    post:
+      summary: Crear nuevo usuario
+      description: Crea un nuevo usuario en el sistema
+      tags:
+        - Usuarios
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserInput'
+            example:
+              name: "Carlos López"
+              email: "carlos@example.com"
+              username: "carlosl"
+      responses:
+        '201':
+          description: Usuario creado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+              example:
+                id: 3
+                name: "Carlos López"
+                email: "carlos@example.com"
+                username: "carlosl"
+        '400':
+          description: Datos de entrada inválidos
+
+  /users/{id}:
+    get:
+      summary: Obtener usuario por ID
+      description: Retorna la información de un usuario específico
+      tags:
+        - Usuarios
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del usuario
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Usuario encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+              example:
+                id: 1
+                name: "Juan Pérez"
+                email: "juan@example.com"
+                username: "juanp"
+        '404':
+          description: Usuario no encontrado
+    put:
+      summary: Actualizar usuario completo
+      description: Actualiza todos los campos de un usuario existente
+      tags:
+        - Usuarios
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del usuario a actualizar
+          schema:
+            type: integer
+            example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserInput'
+            example:
+              name: "Juan Carlos Pérez"
+              email: "juancarlos@example.com"
+              username: "juancp"
+      responses:
+        '200':
+          description: Usuario actualizado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: Usuario no encontrado
+    delete:
+      summary: Eliminar usuario
+      description: Elimina un usuario del sistema
+      tags:
+        - Usuarios
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del usuario a eliminar
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '204':
+          description: Usuario eliminado exitosamente
+        '404':
+          description: Usuario no encontrado
+
+  /posts:
+    get:
+      summary: Obtener todas las publicaciones
+      description: Retorna una lista con todas las publicaciones del sistema
+      tags:
+        - Publicaciones
+      responses:
+        '200':
+          description: Lista de publicaciones obtenida exitosamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Post'
+              example:
+                - id: 1
+                  title: "Mi primera publicación"
+                  content: "Este es el contenido de mi primera publicación"
+                  userId: 1
+                  createdAt: "2025-12-14T10:00:00Z"
+                - id: 2
+                  title: "Segunda publicación"
+                  content: "Contenido de la segunda publicación"
+                  userId: 1
+                  createdAt: "2025-12-14T11:00:00Z"
+    post:
+      summary: Crear nueva publicación
+      description: Crea una nueva publicación asociada a un usuario
+      tags:
+        - Publicaciones
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostInput'
+            example:
+              title: "Nueva publicación"
+              content: "Este es el contenido de la nueva publicación"
+              userId: 1
+      responses:
+        '201':
+          description: Publicación creada exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+              example:
+                id: 3
+                title: "Nueva publicación"
+                content: "Este es el contenido de la nueva publicación"
+                userId: 1
+                createdAt: "2025-12-14T12:00:00Z"
+        '400':
+          description: Datos de entrada inválidos
+
+  /posts/{id}:
+    get:
+      summary: Obtener publicación por ID
+      description: Retorna la información de una publicación específica
+      tags:
+        - Publicaciones
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID de la publicación
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Publicación encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+              example:
+                id: 1
+                title: "Mi primera publicación"
+                content: "Este es el contenido de mi primera publicación"
+                userId: 1
+                createdAt: "2025-12-14T10:00:00Z"
+        '404':
+          description: Publicación no encontrada
+    put:
+      summary: Actualizar publicación completa
+      description: Actualiza todos los campos de una publicación existente
+      tags:
+        - Publicaciones
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID de la publicación a actualizar
+          schema:
+            type: integer
+            example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostInput'
+            example:
+              title: "Mi primera publicación actualizada"
+              content: "Contenido actualizado de la publicación"
+              userId: 1
+      responses:
+        '200':
+          description: Publicación actualizada exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+        '404':
+          description: Publicación no encontrada
+    delete:
+      summary: Eliminar publicación
+      description: Elimina una publicación del sistema
+      tags:
+        - Publicaciones
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID de la publicación a eliminar
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '204':
+          description: Publicación eliminada exitosamente
+        '404':
+          description: Publicación no encontrada
+
+  /users/{id}/posts:
+    get:
+      summary: Obtener publicaciones de un usuario
+      description: Retorna todas las publicaciones creadas por un usuario específico (relación 1 a muchos)
+      tags:
+        - Publicaciones
+        - Usuarios
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del usuario
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Lista de publicaciones del usuario
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Post'
+              example:
+                - id: 1
+                  title: "Mi primera publicación"
+                  content: "Este es el contenido de mi primera publicación"
+                  userId: 1
+                  createdAt: "2025-12-14T10:00:00Z"
+                - id: 2
+                  title: "Segunda publicación"
+                  content: "Contenido de la segunda publicación"
+                  userId: 1
+                  createdAt: "2025-12-14T11:00:00Z"
+        '404':
+          description: Usuario no encontrado
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: ID único del usuario
+          example: 1
+        name:
+          type: string
+          description: Nombre completo del usuario
+          example: "Juan Pérez"
+        email:
+          type: string
+          format: email
+          description: Correo electrónico del usuario
+          example: "juan@example.com"
+        username:
+          type: string
+          description: Nombre de usuario único
+          example: "juanp"
+
+    UserInput:
+      type: object
+      required:
+        - name
+        - email
+        - username
+      properties:
+        name:
+          type: string
+          description: Nombre completo del usuario
+          example: "Juan Pérez"
+        email:
+          type: string
+          format: email
+          description: Correo electrónico del usuario
+          example: "juan@example.com"
+        username:
+          type: string
+          description: Nombre de usuario único
+          example: "juanp"
+
+    Post:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: ID único de la publicación
+          example: 1
+        title:
+          type: string
+          description: Título de la publicación
+          example: "Mi primera publicación"
+        content:
+          type: string
+          description: Contenido de la publicación
+          example: "Este es el contenido de mi primera publicación"
+        userId:
+          type: integer
+          description: ID del usuario que creó la publicación
+          example: 1
+        createdAt:
+          type: string
+          format: date-time
+          description: Fecha y hora de creación de la publicación
+          example: "2025-12-14T10:00:00Z"
+
+    PostInput:
+      type: object
+      required:
+        - title
+        - content
+        - userId
+      properties:
+        title:
+          type: string
+          description: Título de la publicación
+          example: "Mi primera publicación"
+        content:
+          type: string
+          description: Contenido de la publicación
+          example: "Este es el contenido de mi primera publicación"
+        userId:
+          type: integer
+          description: ID del usuario que crea la publicación
+          example: 1
+
+tags:
+  - name: Usuarios
+    description: Operaciones relacionadas con usuarios
+  - name: Publicaciones
+    description: Operaciones relacionadas con publicaciones
